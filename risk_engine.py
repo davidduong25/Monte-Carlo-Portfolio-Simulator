@@ -47,7 +47,7 @@ def human_format(num):
 st.page_link("pages/about.py", label="About", icon="ℹ️")
 
 st.title("🎲 Monte Carlo Portfolio Simulator")
-st.caption("Advanced Time Value of Money with Fat-Tail Risk Analysis.")
+st.caption("This tool uses past ticker data to simulate thousands of possible market paths to show how long term investment outcomes can vary due to uncertainty.")
 
 # --- SIDEBAR: INPUTS ---
 with st.sidebar:
@@ -206,3 +206,4 @@ if 'sim_data' in st.session_state:
 else:
 
     st.info("👈 Enter your portfolio details and click 'Run Analysis' to begin.")
+
