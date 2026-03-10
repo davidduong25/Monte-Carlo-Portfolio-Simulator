@@ -52,7 +52,7 @@ st.caption("Advanced Time Value of Money with Fat-Tail Risk Analysis.")
 # --- SIDEBAR: INPUTS ---
 with st.sidebar:
     st.header("1. Portfolio Strategy")
-    ticker_input = st.text_input("Tickers (comma separated)", "SPY, QQQ, GLD, BTC-USD")
+    ticker_input = st.text_input("Input any tickers (comma separated)", "SPY, QQQ, GLD, BTC-USD")
     tickers = [t.strip().upper() for t in ticker_input.split(",") if t.strip()]
 
     weights = []
@@ -204,4 +204,5 @@ if 'sim_data' in st.session_state:
         st.metric("Success Prob.", f"{success_rate:.1f}%")
 
 else:
+
     st.info("👈 Enter your portfolio details and click 'Run Analysis' to begin.")
