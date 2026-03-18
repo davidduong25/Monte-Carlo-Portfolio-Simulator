@@ -35,13 +35,18 @@ st.markdown("""
 
 
 def human_format(num):
-    """Helper to convert large numbers (1,000,000+) into readable K/M/B strings."""
+    """Helper to convert large numbers into readable strings with overflow protection."""
     magnitude = 0
+    labels = ['', 'K', 'M', 'B', 'T']
+    
+    # Handle the "Too high to display" logic
     while abs(num) >= 1000:
         magnitude += 1
         num /= 1000.0
-    return '{}{}'.format('{:,.1f}'.format(num).rstrip('0').rstrip('.'), ['', 'K', 'M', 'B', 'T'][magnitude])
-
+        if magnitude >= len(labels):
+            return "Too high to display!"
+            
+    return '{}{}'.format('{:,.1f}'.format(num).rstrip('0').rstrip('.'), labels[magnitude])
 
 # Navigation link kept at the top of the main body
 st.page_link("pages/about.py", label="About", icon="ℹ️")
