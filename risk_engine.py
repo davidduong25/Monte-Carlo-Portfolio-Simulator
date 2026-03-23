@@ -196,8 +196,8 @@ if 'sim_data' in st.session_state:
     m_col1, m_col2, m_col3 = st.columns(3)
 
     with m_col1:
-        st.metric("Absolute Best Case", f"${human_format(np.max(final_wealth))}")
-        st.metric("Absolute Worst Case", f"${human_format(np.min(final_wealth))}")
+        st.metric("Top 10%", f"${human_format(np.percentile(final_wealth, 90))}")
+        st.metric("Bottom 10%", f"${human_format(np.percentile(final_wealth, 10))}")
 
     with m_col2:
         st.metric("Median (50th %)", f"${human_format(np.percentile(final_wealth, 50))}")
