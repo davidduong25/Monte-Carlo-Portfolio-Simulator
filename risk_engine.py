@@ -80,7 +80,6 @@ with st.sidebar:
 
 # --- DATA ENGINE ---
 @st.cache_data(show_spinner=False)
-@st.cache_data(show_spinner=False)
 def get_market_data(tickers):
     try:
         # 1. Download data (using 20y to get as much overlap as possible)
