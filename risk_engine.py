@@ -100,10 +100,6 @@ def get_market_data(tickers):
         # 4. The "Overlap" Fix: Drop rows where ANY ticker is NaN
         # This ensures the correlation matrix is calculated on the same days
         clean_returns = returns_df.dropna()
-        
-        if len(clean_returns) < 252: # Require at least 1 year of overlap
-            st.error("⚠️ Insufficient overlapping history. One of your tickers might be too new.")
-            return None, None, None
             
         return clean_returns, df.iloc[-1], clean_returns.corr()
 
