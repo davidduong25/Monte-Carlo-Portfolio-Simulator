@@ -80,19 +80,37 @@ with st.sidebar:
 
 # --- DATA ENGINE ---
 @st.cache_data(show_spinner=False)
+@st.cache_data(show_spinner=False)
 def get_market_data(tickers):
     try:
-        data = yf.download(tickers, period="15y")['Close']
-        if isinstance(data, pd.Series):
-            data = data.to_frame(name=tickers[0])
-        if isinstance(data.columns, pd.MultiIndex):
-            data.columns = data.columns.get_level_values(0)
-        returns = np.log(data / data.shift(1)).dropna()
-        return returns, data.iloc[-1], returns.corr()
-    except Exception as e:
-        st.error(f"Error fetching data: {e}")
-        return None, None, None
+        # 1. Download data (using 20y to get as much overlap as possible)
+        df = yf.download(tickers, period="20y")['Close']
+        
+        # 2. Robust MultiIndex handling (yfinance returns different shapes)
+        if isinstance(df, pd.Series):
+            df = df.to_frame(name=tickers[0])
+        
+        # If columns are MultiIndex (Price, Ticker), flatten them
+        if isinstance(df.columns, pd.MultiIndex):
+            df.columns = df.columns.get_level_values(1)
+            
+        # 3. Calculate Daily Returns
+        # log returns are better for additive Monte Carlo paths
+        returns_df = np.log(df / df.shift(1))
+        
+        # 4. The "Overlap" Fix: Drop rows where ANY ticker is NaN
+        # This ensures the correlation matrix is calculated on the same days
+        clean_returns = returns_df.dropna()
+        
+        if len(clean_returns) < 252: # Require at least 1 year of overlap
+            st.error("⚠️ Insufficient overlapping history. One of your tickers might be too new.")
+            return None, None, None
+            
+        return clean_returns, df.iloc[-1], clean_returns.corr()
 
+    except Exception as e:
+        st.error(f"Data Engine Error: {e}")
+        return None, None, None
 
 # --- MONTE CARLO ENGINE ---
 @st.cache_data(show_spinner=False)
