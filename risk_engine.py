@@ -58,7 +58,7 @@ st.caption("This tool uses past ticker data to simulate thousands of possible ma
 with st.sidebar:
     st.header("1. Portfolio Strategy")
     ticker_input = st.text_input("Input any tickers (comma separated)", "SPY, QQQ, GLD, BTC-USD")
-    tickers = [t.strip().upper() for t in ticker_input.split(",") if t.strip()]
+    tickers = [ticker.strip().upper() for ticker in ticker_input.split(",") if ticker.strip()]
 
     weights = []
     cols = st.columns(2)
